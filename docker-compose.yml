@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+
+  api:
+    container_name: flaskapi
+    depends_on:
+      - postgres
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - /tmp/app:/var/log/app
+      - /tmp/logs:/opt/apache-tomcat-aclogs/
+    ports:
+      - '5000:8443'
+
+  postgres:
+    image: postgres:12.1-alpine
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - '10001:5432'
