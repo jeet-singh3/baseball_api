@@ -21,7 +21,7 @@ $(VENV_NAME)/bin/activate: requirements.txt
 
 test:
 	docker-compose down
-	docker build -t flaskapi .
+	docker build -t baseballapi .
 	docker-compose run --entrypoint "/app/test.sh" api
 	docker-compose down
 

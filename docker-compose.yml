@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   api:
-    container_name: flaskapi
+    container_name: baseballapi
     depends_on:
       - postgres
     build:
