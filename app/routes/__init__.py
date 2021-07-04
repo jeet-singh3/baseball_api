@@ -2,6 +2,7 @@ import importlib
 import os
 import logging
 import datetime
+import decimal
 
 from flask import Flask
 from flask import jsonify
@@ -77,10 +78,15 @@ def handle_error(error):
     return json_response(res, status_code=status)
 
 
+class Encoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, decimal.Decimal): return float(obj)
+
+
 def json_response(res, status_code=200):
     return Response(
         mimetype='application/json',
-        response=json.dumps(res),
+        response=json.dumps(res, cls=Encoder),
         status=status_code
     )
 

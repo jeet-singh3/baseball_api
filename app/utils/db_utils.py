@@ -44,3 +44,25 @@ def new_login(username):
     except Exception as error:
         LOG.error(f"Error running sql statement: {error}")
         return False
+
+
+def generate_sql_for_search(name_use, name_last):
+    sql_stmt = "select player_id, name_use, name_last from players where "
+    if name_use and name_last:
+        sql_stmt += "name_use = %(name_use)s and name_last = %(name_last)s"
+    elif name_use:
+        sql_stmt += "name_use = %(name_use)s"
+    elif name_last:
+        sql_stmt += "name_last = %(name_last)s"
+    else:
+        raise Exception("firstName or lastName is needed in order to search for players")
+    return sql_stmt
+
+
+def get_players(name_use, name_last):
+    sql_stmt = generate_sql_for_search(name_use, name_last)
+    players = PG_DB.all(sql_stmt, {
+        "name_use": name_use,
+        "name_last": name_last
+    })
+    return players

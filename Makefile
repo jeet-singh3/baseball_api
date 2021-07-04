@@ -15,10 +15,6 @@ all:
 	@echo "make init	-	Create python virtual environment and install dependencies"
 	@echo "make docker	-	Run the REST API server in a dockerized container"
 
-$(VENV_NAME)/bin/activate: requirements.txt
-	make pip
-	touch $(VENV_NAME)/bin/activate
-
 test:
 	docker-compose down
 	docker build -t baseballapi .
@@ -29,11 +25,6 @@ test-inside-docker:
 	sleep 5
 	pytest --disable-pytest-warnings --cov=app
 
-pip:
-	test -d $(VENV_NAME) || virtualenv -p python3 $(VENV_NAME)
-	source $(VENV_NAME)/bin/activate
-	${PYTHON} -m pip install -r requirements.txt
-
 db-up:
 	docker-compose down
 	docker-compose up -d postgres
@@ -41,11 +32,8 @@ db-up:
 db-down:
 	docker-compose down
 
-run:
-	${FLASK} run --port=5000 2>&1
-
 docker:
-	docker system prune
+	docker-compose down
 	docker-compose up --build --force-recreate
 
 base:

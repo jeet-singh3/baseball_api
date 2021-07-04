@@ -11,7 +11,7 @@ from app.services import (
     PlayerService
 )
 
-from app.routes import json_response
+from app.routes import json_response, json_error_response
 
 LOG = logging.getLogger(__name__)
 LOG.setLevel(logging.DEBUG)
@@ -48,5 +48,8 @@ def login():
 @API.route('/players', methods=['GET'])
 @cross_origin()
 def fetch_players():
-    response = PlayerService.handle_request(request)
-    return json_response(response)
+    try:
+        response = PlayerService.handle_request(request)
+        return json_response(response)
+    except Exception as error:
+        return json_error_response(str(error))
