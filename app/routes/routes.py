@@ -8,7 +8,8 @@ from flask_cors import cross_origin
 from app.services import (
     HelloWorldService,
     LoginService,
-    PlayerService
+    PlayerService,
+    PitcherSummaryService
 )
 
 from app.routes import json_response, json_error_response
@@ -50,6 +51,16 @@ def login():
 def fetch_players():
     try:
         response = PlayerService.handle_request(request)
+        return json_response(response)
+    except Exception as error:
+        return json_error_response(str(error))
+
+
+@API.route('/pitcherSummary', methods=['GET'])
+@cross_origin()
+def fetch_pitcher_summary():
+    try:
+        response = PitcherSummaryService.handle_request(request)
         return json_response(response)
     except Exception as error:
         return json_error_response(str(error))

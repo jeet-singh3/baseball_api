@@ -3,6 +3,7 @@ import logging
 import sys
 from postgres import Postgres
 from app.models.player import PlayerModel
+from app.models.aggregate_pitch import AggregatePitchModel
 
 LOG = logging.getLogger(__name__)
 LOG.setLevel(logging.DEBUG)
@@ -74,3 +75,63 @@ def get_players(name_use, name_last):
 
     LOG.info(f"Retrieved players with first name: {name_use} and last name: {name_last}")
     return players_list
+
+
+def get_pitches(pitcher_id):
+    sql_stmt = 'select pitchtype, count(*) from pitches where pitcherId = %(pitcher_id)s group by pitchtype'
+    pitches = PG_DB.all(sql_stmt, {
+        "pitcher_id": pitcher_id
+    })
+    LOG.info(f"Retrieved all pitch types for pitcher {pitcher_id}")
+    pitch_list = []
+    for pitch in pitches:
+        ah_pitch = AggregatePitchModel(pitchtype=pitch[0], count=int(pitch[1]))
+        ah_pitch_dict = ah_pitch.to_dict()
+        pitch_list.append(ah_pitch_dict)
+    return pitch_list
+
+
+def get_average_values_for_summary(pitcher_id, pitch_type):
+    sql_stmt = "select relspeed, horzbreak, inducedvertbreak, spinrate, hitexitspeed, hitlaunchangle" \
+               " from pitches where pitcherid = %(pitcherId)s and pitchtype = %(pitchtype)s"
+    values = PG_DB.all(sql_stmt, {
+        "pitcherId": pitcher_id,
+        "pitchtype": pitch_type
+    })
+    LOG.info(f"Retrieved all {pitch_type} pitches for pitcher {pitcher_id}")
+    number_rel_speed = 0
+    number_horizontal_break = 0
+    number_vertical_break = 0
+    number_spin_rate = 0
+    number_hit_exit_speed = 0
+    number_hit_launch_angle = 0
+    rel_speed = 0
+    horizontal_break = 0
+    vertical_break = 0
+    spin_rate = 0
+    hit_exit_speed = 0
+    hit_launch_angle = 0
+    for value in values:
+        if value[0] != 'NA':
+            rel_speed += float(value[0])
+            number_rel_speed += 1
+        if value[1] != 'NA':
+            horizontal_break += float(value[1])
+            number_horizontal_break += 1
+        if value[2] != 'NA':
+            vertical_break += float(value[2])
+            number_vertical_break += 1
+        if value[3] != 'NA':
+            spin_rate += float(value[3])
+            number_spin_rate += 1
+        if value[4] != 'NA':
+            hit_exit_speed += float(value[4])
+            number_hit_exit_speed += 1
+        if value[5] != 'NA':
+            hit_launch_angle += float(value[5])
+            number_hit_launch_angle += 1
+
+    return [rel_speed / number_rel_speed, horizontal_break / number_horizontal_break,
+            vertical_break / number_vertical_break, spin_rate / number_spin_rate,
+            hit_exit_speed / number_hit_exit_speed, hit_launch_angle / number_hit_launch_angle]
+
