@@ -49,7 +49,7 @@ def initial_table_creation():
     LOG.info("Checking if players are there")
     num_players = db.one("select count(*) from players")
     if num_players == 87292:
-        LOG.info("Skipping player insert as players are already there.")
+        LOG.info("Skipping player.py insert as players are already there.")
     else:
         open_file = open('/app/app/utils/players.csv', 'r')
         csv_file = csv.reader(open_file)

@@ -16,7 +16,10 @@ class PlayerService:
     def handle_request(cls, request):
         name_use, name_last = cls.validate_args(request)
         players = get_players(name_use, name_last)
-        return players
+        return {
+            'players': players,
+            'count': len(players)
+        }
 
     @staticmethod
     def validate_args(request):

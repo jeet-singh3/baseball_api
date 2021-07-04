@@ -2,6 +2,7 @@ import os
 import logging
 import sys
 from postgres import Postgres
+from app.models.player import PlayerModel
 
 LOG = logging.getLogger(__name__)
 LOG.setLevel(logging.DEBUG)
@@ -65,4 +66,11 @@ def get_players(name_use, name_last):
         "name_use": name_use,
         "name_last": name_last
     })
-    return players
+    players_list = []
+    for player in players:
+        player_guy = PlayerModel(playerId=player[0], nameUse=player[1], nameLast=player[2])
+        player_guy_dict = player_guy.to_dict()
+        players_list.append(player_guy_dict)
+
+    LOG.info(f"Retrieved players with first name: {name_use} and last name: {name_last}")
+    return players_list
