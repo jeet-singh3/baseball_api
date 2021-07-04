@@ -7,7 +7,8 @@ from flask_cors import cross_origin
 
 from app.services import (
     HelloWorldService,
-    LoginService
+    LoginService,
+    PlayerService
 )
 
 from app.routes import json_response
@@ -41,4 +42,11 @@ def hello_world():
 @cross_origin()
 def login():
     response = LoginService.handle_request(request)
+    return json_response(response)
+
+
+@API.route('/players', methods=['GET'])
+@cross_origin()
+def fetch_players():
+    response = PlayerService.handle_request(request)
     return json_response(response)

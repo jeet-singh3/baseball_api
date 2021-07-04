@@ -1,2 +1,6 @@
 .env
 venv/
+logs/
+postgres-data/
+app/utils/mlb_2021_pitches.csv
+app/utils/players.csv
