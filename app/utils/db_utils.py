@@ -49,7 +49,7 @@ def new_login(username):
 
 
 def generate_sql_for_searching_games(game_date, home_team, away_team):
-    sql_stmt = "select distinct game_pk from pitches where "
+    sql_stmt = "select distinct game_pk, home_team_abbrev, away_team_abbrev from pitches where "
     if not game_date and not home_team and not away_team:
         sql_stmt += "game_date = '2021-05-01'"
     else:
@@ -71,14 +71,16 @@ def generate_sql_for_searching_games(game_date, home_team, away_team):
 
 def search_games(game_date, home_team, away_team):
     sql_stmt = generate_sql_for_searching_games(game_date, home_team, away_team)
-    games = PG_DB.all(sql_stmt, {
+    values = PG_DB.all(sql_stmt, {
         "gameDate": game_date,
         "homeTeam": home_team,
         "awayTeam": away_team
     })
     games_array = []
-    for game in games:
-        games_array.append(int(game))
+    for value in values:
+        games_array.append({"gameId": int(value[0]),
+                            "homeTeam": value[1],
+                            "awayTeam": value[2]})
     return games_array
 
 

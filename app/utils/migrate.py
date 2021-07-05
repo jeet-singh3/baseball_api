@@ -89,6 +89,10 @@ def initial_table_creation():
         "create index if not exists pitches_ix_02 on pitches(game_pk, PitcherId)"
     )
     LOG.info("Executed command: created index on pitches(game_pk, PitcherId)")
+    db.run(
+        "create index if not exists pitches_ix_03 on pitches(game_date)"
+    )
+    LOG.info("Executed command: created index on pitches(game_pk, PitcherId)")
     num_pitches = db.one("select count(*) from pitches")
     if num_pitches == 349178:
         LOG.info("Skipping pitches insert as pitches are already there.")
