@@ -48,6 +48,40 @@ def new_login(username):
         return False
 
 
+def generate_sql_for_searching_games(game_date, home_team, away_team):
+    sql_stmt = "select distinct game_pk from pitches where "
+    if not game_date and not home_team and not away_team:
+        sql_stmt += "game_date = '2021-05-01'"
+    else:
+        counter = 0
+        vals = [game_date, home_team, away_team]
+        for idx, val in enumerate(vals):
+            if val:
+                counter += 1
+                sql_stmt += "and " if counter > 1 and not sql_stmt.endswith("and ") else ""
+                if idx == 0:
+                    sql_stmt += "game_date = %(gameDate)s "
+                if idx == 1:
+                    sql_stmt += "home_team_abbrev = %(homeTeam)s "
+                if idx == 2:
+                    sql_stmt += "away_team_abbrev = %(awayTeam)s "
+    LOG.info(f"Generated sql statement: {sql_stmt}")
+    return sql_stmt
+
+
+def search_games(game_date, home_team, away_team):
+    sql_stmt = generate_sql_for_searching_games(game_date, home_team, away_team)
+    games = PG_DB.all(sql_stmt, {
+        "gameDate": game_date,
+        "homeTeam": home_team,
+        "awayTeam": away_team
+    })
+    games_array = []
+    for game in games:
+        games_array.append(int(game))
+    return games_array
+
+
 def generate_sql_for_search(name_use, name_last):
     sql_stmt = "select player_id, name_use, name_last from players where "
     if name_use and name_last:

@@ -12,7 +12,8 @@ from app.services import (
     PitcherSummaryService,
     PitcherGamesSummaryService,
     PitcherIndividualGameService,
-    IndividualGameService
+    IndividualGameService,
+    GameService
 )
 
 from app.utils.utils import validate_args
@@ -49,6 +50,16 @@ def hello_world():
 def login():
     response = LoginService.handle_request(request)
     return json_response(response)
+
+
+@API.route('/games', methods=['GET'])
+@cross_origin()
+def fetch_games():
+    try:
+        response = GameService.handle_request(request)
+        return json_response(response)
+    except Exception as error:
+        return json_error_response(str(error))
 
 
 @API.route('/players', methods=['GET'])
