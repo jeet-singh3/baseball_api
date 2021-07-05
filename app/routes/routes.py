@@ -9,7 +9,8 @@ from app.services import (
     HelloWorldService,
     LoginService,
     PlayerService,
-    PitcherSummaryService
+    PitcherSummaryService,
+    PitcherGameSummaryService
 )
 
 from app.routes import json_response, json_error_response
@@ -61,6 +62,16 @@ def fetch_players():
 def fetch_pitcher_summary():
     try:
         response = PitcherSummaryService.handle_request(request)
+        return json_response(response)
+    except Exception as error:
+        return json_error_response(str(error))
+
+
+@API.route('/pitcherGameSummary', methods=['GET'])
+@cross_origin()
+def fetch_pitcher_game_summary():
+    try:
+        response = PitcherGameSummaryService.handle_request(request)
         return json_response(response)
     except Exception as error:
         return json_error_response(str(error))

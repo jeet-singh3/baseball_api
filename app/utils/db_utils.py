@@ -91,6 +91,51 @@ def get_pitches(pitcher_id):
     return pitch_list
 
 
+def get_games(pitcher_id):
+    sql_stmt = 'select distinct game_pk from pitches where pitcherId = %(pitcher_id)s'
+    games_array = []
+    games = PG_DB.all(sql_stmt, {
+        "pitcher_id": pitcher_id
+    })
+    for game in games:
+        games_array.append(int(game))
+    LOG.info(f"Retrieved all games for pitcher {pitcher_id}")
+    return games_array
+
+
+def get_pitch_types_by_games(pitcher_games, pitcher_id):
+    pitch_types_games_dict = {}
+    for game in pitcher_games:
+        sql_stmt = 'select pitchtype, count(*) from pitches where pitcherId = %(pitcher_id)s ' \
+                   'and game_pk = %(game)s group by pitchtype'
+        pitch_types = PG_DB.all(sql_stmt, {
+            "pitcher_id": pitcher_id,
+            "game": game
+        })
+        pitch_list = []
+        for pitch in pitch_types:
+            ah_pitch = AggregatePitchModel(pitchtype=pitch[0], count=int(pitch[1]))
+            ah_pitch_dict = ah_pitch.to_dict()
+            pitch_list.append(ah_pitch_dict)
+        pitch_types_games_dict[game] = pitch_list
+        LOG.info(f"Retrieved all pitch types for pitcher {pitcher_id} in game {game}")
+    return pitch_types_games_dict
+
+
+def get_average_fastball_velocity(pitcher_id, game_id):
+    sql_stmt = "select relspeed from pitches where pitcherid = %(pitcherId)s and game_pk = %(gameId)s and " \
+               "(pitchtype = 'Fastball' or pitchtype = 'Sinker')"
+    values = PG_DB.all(sql_stmt, {
+        "pitcherId": pitcher_id,
+        "gameId": game_id
+    })
+    fastball_speed = 0
+    count_fastball = len(values)
+    for value in values:
+        fastball_speed += float(value)
+    return fastball_speed / count_fastball
+
+
 def get_average_values_for_summary(pitcher_id, pitch_type):
     sql_stmt = "select relspeed, horzbreak, inducedvertbreak, spinrate, hitexitspeed, hitlaunchangle" \
                " from pitches where pitcherid = %(pitcherId)s and pitchtype = %(pitchtype)s"
