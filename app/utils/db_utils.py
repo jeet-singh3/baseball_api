@@ -103,21 +103,25 @@ def get_games(pitcher_id):
     return games_array
 
 
+def get_pitch_types_by_game_id(pitcher_game, pitcher_id):
+    sql_stmt = 'select pitchtype, count(*) from pitches where pitcherId = %(pitcher_id)s ' \
+               'and game_pk = %(game)s group by pitchtype'
+    pitch_types = PG_DB.all(sql_stmt, {
+        "pitcher_id": pitcher_id,
+        "game": pitcher_game
+    })
+    pitch_list = []
+    for pitch in pitch_types:
+        ah_pitch = AggregatePitchModel(pitchtype=pitch[0], count=int(pitch[1]))
+        ah_pitch_dict = ah_pitch.to_dict()
+        pitch_list.append(ah_pitch_dict)
+    return pitch_list
+
+
 def get_pitch_types_by_games(pitcher_games, pitcher_id):
     pitch_types_games_dict = {}
     for game in pitcher_games:
-        sql_stmt = 'select pitchtype, count(*) from pitches where pitcherId = %(pitcher_id)s ' \
-                   'and game_pk = %(game)s group by pitchtype'
-        pitch_types = PG_DB.all(sql_stmt, {
-            "pitcher_id": pitcher_id,
-            "game": game
-        })
-        pitch_list = []
-        for pitch in pitch_types:
-            ah_pitch = AggregatePitchModel(pitchtype=pitch[0], count=int(pitch[1]))
-            ah_pitch_dict = ah_pitch.to_dict()
-            pitch_list.append(ah_pitch_dict)
-        pitch_types_games_dict[game] = pitch_list
+        pitch_types_games_dict[game] = get_pitch_types_by_game_id(game, pitcher_id)
         LOG.info(f"Retrieved all pitch types for pitcher {pitcher_id} in game {game}")
     return pitch_types_games_dict
 

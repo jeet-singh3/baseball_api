@@ -20,10 +20,11 @@ class PitcherGameSummaryService:
         player_pitch_types_by_game = get_pitch_types_by_games(pitcher_games, pitcher_id)
         game_summary_list = []
         for game in player_pitch_types_by_game:
-            game_summary = cls.calculate_game_summary(player_pitch_types_by_game[game])
+            game_summary, pitch_count = cls.calculate_game_summary(player_pitch_types_by_game[game])
             game_summary_list.append({"gameId": game,
                                       "summary": game_summary,
-                                      "average_fastball_velocity": get_average_fastball_velocity(pitcher_id, game)})
+                                      "pitchCount": pitch_count,
+                                      "averageFastballVelocity": get_average_fastball_velocity(pitcher_id, game)})
         return game_summary_list
 
     @staticmethod
@@ -49,6 +50,6 @@ class PitcherGameSummaryService:
                                'count': int(pitch["count"]),
                                "percentage": 100 * int(pitch["count"]) / count,
                                })
-        return pitch_list
+        return pitch_list, count
 
 
