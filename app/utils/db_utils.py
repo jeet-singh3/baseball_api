@@ -103,6 +103,18 @@ def get_games(pitcher_id):
     return games_array
 
 
+def get_pitchers_for_game(game_id):
+    sql_stmt = 'select distinct pitcherid from pitches where game_pk = %(gameId)s'
+    pitchers_array = []
+    pitchers = PG_DB.all(sql_stmt, {
+        "gameId": game_id
+    })
+    for pitcher in pitchers:
+        pitchers_array.append(int(pitcher))
+    LOG.info(f"Retrieved all pitchers for game {game_id}")
+    return pitchers_array
+
+
 def get_pitch_types_by_game_id(pitcher_game, pitcher_id):
     sql_stmt = 'select pitchtype, count(*) from pitches where pitcherId = %(pitcher_id)s ' \
                'and game_pk = %(game)s group by pitchtype'

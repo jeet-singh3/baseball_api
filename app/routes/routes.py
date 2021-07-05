@@ -11,7 +11,8 @@ from app.services import (
     PlayerService,
     PitcherSummaryService,
     PitcherGamesSummaryService,
-    PitcherIndividualGameService
+    PitcherIndividualGameService,
+    IndividualGameService
 )
 
 from app.utils.utils import validate_args
@@ -86,6 +87,16 @@ def fetch_pitcher_individual_game_summary():
     try:
         pitcher_id, game_id = validate_args(request)
         response = PitcherIndividualGameService.handle_request(pitcher_id, game_id)
+        return json_response(response)
+    except Exception as error:
+        return json_error_response(str(error))
+
+
+@API.route('/individualGameSummary', methods=['GET'])
+@cross_origin()
+def fetch_game_summary():
+    try:
+        response = IndividualGameService.handle_request(request)
         return json_response(response)
     except Exception as error:
         return json_error_response(str(error))
