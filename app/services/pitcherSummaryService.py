@@ -1,7 +1,7 @@
 import logging
 import sys
 from app.utils.constants import MAX_SCHERZER
-from app.utils.db_utils import get_pitches, get_average_values_for_summary
+from app.utils.db_utils import get_pitches, get_average_values_for_summary, get_player_name_by_id
 
 LOG = logging.getLogger(__name__)
 LOG.setLevel(logging.DEBUG)
@@ -18,7 +18,9 @@ class PitcherSummaryService:
         pitcher_id = cls.validate_args(request)
         players_pitches = get_pitches(pitcher_id)
         summary_list = cls.calculate_summary(players_pitches, pitcher_id)
-        return summary_list
+        first_name, last_name = get_player_name_by_id(pitcher_id)
+        return {"pitches_summary": summary_list,
+                "name": f"{first_name} {last_name}"}
 
     @staticmethod
     def validate_args(request):

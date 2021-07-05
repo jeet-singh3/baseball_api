@@ -1,7 +1,7 @@
 import logging
 import sys
 from app.utils.constants import MAX_SCHERZER
-from app.utils.db_utils import get_games, get_pitch_types_by_games, get_average_fastball_velocity
+from app.utils.db_utils import get_games, get_pitch_types_by_games, get_average_fastball_velocity, get_player_name_by_id
 
 LOG = logging.getLogger(__name__)
 LOG.setLevel(logging.DEBUG)
@@ -12,7 +12,7 @@ handler.setFormatter(formatter)
 LOG.addHandler(handler)
 
 
-class PitcherGameSummaryService:
+class PitcherGamesSummaryService:
     @classmethod
     def handle_request(cls, request):
         pitcher_id = cls.validate_args(request)
@@ -25,7 +25,11 @@ class PitcherGameSummaryService:
                                       "summary": game_summary,
                                       "pitchCount": pitch_count,
                                       "averageFastballVelocity": get_average_fastball_velocity(pitcher_id, game)})
-        return game_summary_list
+
+        first_name, last_name = get_player_name_by_id(pitcher_id)
+
+        return {"games_summary": game_summary_list,
+                "name": f"{first_name} {last_name}"}
 
     @staticmethod
     def validate_args(request):

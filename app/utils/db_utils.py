@@ -140,6 +140,14 @@ def get_average_fastball_velocity(pitcher_id, game_id):
     return fastball_speed / count_fastball
 
 
+def get_player_name_by_id(player_id):
+    sql_stmt = "select name_use, name_last from players where player_id = %(playerId)s"
+    value = PG_DB.one(sql_stmt, {
+        "playerId": player_id,
+    })
+    return value[0], value[1]
+
+
 def get_average_values_for_summary(pitcher_id, pitch_type):
     sql_stmt = "select relspeed, horzbreak, inducedvertbreak, spinrate, hitexitspeed, hitlaunchangle" \
                " from pitches where pitcherid = %(pitcherId)s and pitchtype = %(pitchtype)s"
