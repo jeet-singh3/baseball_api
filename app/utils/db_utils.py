@@ -185,7 +185,7 @@ def get_average_fastball_velocity(pitcher_id, game_id):
     count_fastball = len(values)
     for value in values:
         fastball_speed += float(value)
-    return fastball_speed / count_fastball
+    return fastball_speed / count_fastball if count_fastball > 0 else 0
 
 
 def get_player_name_by_id(player_id):

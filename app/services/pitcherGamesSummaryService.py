@@ -52,7 +52,7 @@ class PitcherGamesSummaryService:
             pitch_type = pitch["pitchtype"]
             pitch_list.append({'pitchType': pitch_type,
                                'count': int(pitch["count"]),
-                               "percentage": 100 * int(pitch["count"]) / count,
+                               "percentage": 100 * int(pitch["count"]) / count if count > 0 else 0,
                                })
         return pitch_list, count
 
