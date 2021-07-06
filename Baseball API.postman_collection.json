@@ -1,0 +1,203 @@
+{
+	"info": {
+		"_postman_id": "853e5d76-13d7-4179-a30a-316941e86f93",
+		"name": "Baseball API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Fetch Players",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:5000/api/v1/players?lastName=Loaisiga",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"players"
+					],
+					"query": [
+						{
+							"key": "firstName",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "lastName",
+							"value": "Loaisiga"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pitcher Summary",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:5000/api/v1/pitcherSummary?pitcherId=642528",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"pitcherSummary"
+					],
+					"query": [
+						{
+							"key": "pitcherId",
+							"value": "642528"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pitcher Game Summary",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:5000/api/v1/pitcherGameSummary?pitcherId=453286",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"pitcherGameSummary"
+					],
+					"query": [
+						{
+							"key": "pitcherId",
+							"value": "453286"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pitcher Individual Game Summary",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:5000/api/v1/pitcherIndividualGameSummary?gameId=633554&pitcherId=605488",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"pitcherIndividualGameSummary"
+					],
+					"query": [
+						{
+							"key": "gameId",
+							"value": "633554"
+						},
+						{
+							"key": "pitcherId",
+							"value": "605488"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Individual Game Summary",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:5000/api/v1/individualGameSummary?gameId=634149",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"individualGameSummary"
+					],
+					"query": [
+						{
+							"key": "gameId",
+							"value": "634149"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch Games",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/api/v1/games?gameDate=2021-05-11",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"games"
+					],
+					"query": [
+						{
+							"key": "gameDate",
+							"value": "2021-05-11"
+						},
+						{
+							"key": "homeTeam",
+							"value": "BAL",
+							"disabled": true
+						},
+						{
+							"key": "awayTeam",
+							"value": "LAD",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
