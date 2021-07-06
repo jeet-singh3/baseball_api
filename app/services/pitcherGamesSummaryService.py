@@ -1,7 +1,13 @@
 import logging
 import sys
 from app.utils.constants import MAX_SCHERZER
-from app.utils.db_utils import get_games, get_pitch_types_by_games, get_average_fastball_velocity, get_player_name_by_id
+from app.utils.db_utils import (
+    get_games,
+    get_pitch_types_by_games,
+    get_average_fastball_velocity,
+    get_player_name_by_id,
+    get_game_info
+)
 
 LOG = logging.getLogger(__name__)
 LOG.setLevel(logging.DEBUG)
@@ -21,9 +27,13 @@ class PitcherGamesSummaryService:
         game_summary_list = []
         for game in player_pitch_types_by_game:
             game_summary, pitch_count = cls.calculate_game_summary(player_pitch_types_by_game[game])
+            home_team, away_team, game_date = get_game_info(game)
             game_summary_list.append({"gameId": game,
                                       "summary": game_summary,
                                       "pitchCount": pitch_count,
+                                      "homeTeam": home_team,
+                                      "awayTeam": away_team,
+                                      "gameDate": game_date.strftime('%Y-%m-%d'),
                                       "averageFastballVelocity": get_average_fastball_velocity(pitcher_id, game)})
 
         first_name, last_name = get_player_name_by_id(pitcher_id)

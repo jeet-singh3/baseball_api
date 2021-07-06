@@ -166,6 +166,15 @@ def get_pitch_types_by_game_id(pitcher_game, pitcher_id):
     return pitch_list
 
 
+def get_game_info(game_id):
+    sql_stmt = "select distinct home_team_abbrev, away_team_abbrev, game_date " \
+               "from pitches where game_pk = %(gameId)s limit 1"
+    value = PG_DB.one(sql_stmt, {
+        "gameId": game_id,
+    })
+    return value[0], value[1], value[2]
+
+
 def get_pitch_types_by_games(pitcher_games, pitcher_id):
     pitch_types_games_dict = {}
     for game in pitcher_games:
