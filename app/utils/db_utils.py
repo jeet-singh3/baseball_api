@@ -236,7 +236,12 @@ def get_average_values_for_summary(pitcher_id, pitch_type):
             hit_launch_angle += float(value[5])
             number_hit_launch_angle += 1
 
-    return [rel_speed / number_rel_speed, horizontal_break / number_horizontal_break,
-            vertical_break / number_vertical_break, spin_rate / number_spin_rate,
-            hit_exit_speed / number_hit_exit_speed, hit_launch_angle / number_hit_launch_angle]
+    avg_rel_speed = rel_speed / number_rel_speed if number_rel_speed > 0 else 0
+    avg_horizontal_break = horizontal_break / number_horizontal_break if number_horizontal_break > 0 else 0
+    avg_vertical_break = vertical_break / number_vertical_break if number_vertical_break > 0 else 0
+    avg_spin_rate = spin_rate / number_spin_rate if number_spin_rate > 0 else 0
+    avg_hit_exit_speed = hit_exit_speed / number_hit_exit_speed if number_hit_exit_speed > 0 else 0
+    avg_hit_launch_angle = hit_launch_angle / number_hit_launch_angle if number_hit_launch_angle > 0 else 0
 
+    return [avg_rel_speed, avg_horizontal_break, avg_vertical_break,
+            avg_spin_rate, avg_hit_exit_speed, avg_hit_launch_angle]

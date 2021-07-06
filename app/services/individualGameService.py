@@ -21,7 +21,12 @@ class IndividualGameService:
         pitchers = []
         for pitcher in pitchers_for_game:
             pitcher_game_summary = PitcherIndividualGameService.handle_request(pitcher, game_id)
-            pitchers.append(pitcher_game_summary)
+            pitchers.append(
+                {
+                    "pitcherId": pitcher,
+                    "summary": pitcher_game_summary
+                }
+            )
         return pitchers
 
     @staticmethod

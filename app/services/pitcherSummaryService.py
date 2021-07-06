@@ -44,7 +44,7 @@ class PitcherSummaryService:
             average_values = get_average_values_for_summary(pitcher, pitch_type)
             pitch_list.append({'pitchType': pitch_type,
                                'count': int(pitch["count"]),
-                               "percentage": 100 * int(pitch["count"]) / count,
+                               "percentage": 100 * int(pitch["count"]) / count if count > 0 else 0,
                                "avgPitchSpeed": average_values[0],
                                "avgHorizontalMovement": average_values[1],
                                "avgVerticalMovement": average_values[2],
